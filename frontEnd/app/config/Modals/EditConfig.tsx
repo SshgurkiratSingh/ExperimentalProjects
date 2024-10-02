@@ -1,115 +1,165 @@
-import React from "react";
-import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, RadioGroup, Radio} from "@nextui-org/react";
+"use client";
+import React, { useState } from "react";
+import {
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  useDisclosure,
+} from "@nextui-org/modal";
+import { Button } from "@nextui-org/button";
+import { Radio, RadioGroup } from "@nextui-org/radio";
+import { Divider } from "@nextui-org/divider";
+import { Popover, PopoverTrigger, PopoverContent } from "@nextui-org/popover";
+import { Input } from "@nextui-org/input";
+import { toast } from "react-toastify";
 
-export default function App() {
-  const {isOpen, onOpen, onOpenChange} = useDisclosure();
-  const [scrollBehavior, setScrollBehavior] = React.useState("inside");
+const EditConfigModal: React.FC = () => {
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [scrollBehavior, setScrollBehavior] = useState<string>("auto");
+  const [wifiSSID, setWifiSSID] = useState<string>("Server_Fetched");
+  const [wifiPassword, setWifiPassword] = useState<string>("Server_Fetched");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [mqttServer, setMqttServer] = useState<string>("Server_Fetched");
+  const [pingIdentityTopic, setPingIdentityTopic] =
+    useState<string>("Server_Fetched");
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setScrollBehavior(event.target.value); // Use the value from the event
+  };
+
+  // Handlers for input changes
+  const handleWifiSSIDChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setWifiSSID(event.target.value);
+  };
+
+  const handleWifiPasswordChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setWifiPassword(event.target.value);
+  };
+
+  const handleMqttServerChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setMqttServer(event.target.value);
+  };
+
+  const handlePingIdentityTopicChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setPingIdentityTopic(event.target.value);
+  };
 
   return (
-    <div className="flex flex-col gap-2">
-      <Button onPress={onOpen}>Open Modal</Button>
-      <RadioGroup
-        label="Select scroll behavior"
-        orientation="horizontal"
-        value={scrollBehavior}
-        onValueChange={setScrollBehavior}
+    <div className="flex flex-col gap-2 p-2">
+      <Button
+        onPress={onOpen}
+        className="min-w-1/2 gradient-text2 "
+        variant="ghost"
+        color="secondary"
       >
-        <Radio value="inside">inside</Radio>
-        <Radio value="outside">outside</Radio>
-      </RadioGroup>
+        Edit Config
+      </Button>
+
       <Modal
         isOpen={isOpen}
         onOpenChange={onOpenChange}
-        scrollBehavior={scrollBehavior}
+        scrollBehavior={"inside"}
       >
         <ModalContent>
-          {(onClose) => (
+          {(onClose: any) => (
             <>
               <ModalHeader className="flex flex-col gap-1">
-                Modal Title
+                Edit Config Settings
               </ModalHeader>
               <ModalBody>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Nullam pulvinar risus non risus hendrerit venenatis.
-                  Pellentesque sit amet hendrerit risus, sed porttitor quam.
-                </p>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Nullam pulvinar risus non risus hendrerit venenatis.
-                  Pellentesque sit amet hendrerit risus, sed porttitor quam.
-                </p>
-                <p>
-                  Magna exercitation reprehenderit magna aute tempor cupidatat
-                  consequat elit dolor adipisicing. Mollit dolor eiusmod sunt ex
-                  incididunt cillum quis. Velit duis sit officia eiusmod Lorem
-                  aliqua enim laboris do dolor eiusmod. Et mollit incididunt
-                  nisi consectetur esse laborum eiusmod pariatur proident Lorem
-                  eiusmod et. Culpa deserunt nostrud ad veniam.
-                </p>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Nullam pulvinar risus non risus hendrerit venenatis.
-                  Pellentesque sit amet hendrerit risus, sed porttitor quam.
-                  Magna exercitation reprehenderit magna aute tempor cupidatat
-                  consequat elit dolor adipisicing. Mollit dolor eiusmod sunt ex
-                  incididunt cillum quis. Velit duis sit officia eiusmod Lorem
-                  aliqua enim laboris do dolor eiusmod. Et mollit incididunt
-                  nisi consectetur esse laborum eiusmod pariatur proident Lorem
-                  eiusmod et. Culpa deserunt nostrud ad veniam.
-                </p>
-                <p>
-                  Mollit dolor eiusmod sunt ex incididunt cillum quis. Velit
-                  duis sit officia eiusmod Lorem aliqua enim laboris do dolor
-                  eiusmod. Et mollit incididunt nisi consectetur esse laborum
-                  eiusmod pariatur proident Lorem eiusmod et. Culpa deserunt
-                  nostrud ad veniam. Lorem ipsum dolor sit amet, consectetur
-                  adipiscing elit. Nullam pulvinar risus non risus hendrerit
-                  venenatis. Pellentesque sit amet hendrerit risus, sed
-                  porttitor quam. Magna exercitation reprehenderit magna aute
-                  tempor cupidatat consequat elit dolor adipisicing. Mollit
-                  dolor eiusmod sunt ex incididunt cillum quis. Velit duis sit
-                  officia eiusmod Lorem aliqua enim laboris do dolor eiusmod. Et
-                  mollit incididunt nisi consectetur esse laborum eiusmod
-                  pariatur proident Lorem eiusmod et. Culpa deserunt nostrud ad
-                  veniam.
-                </p>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Nullam pulvinar risus non risus hendrerit venenatis.
-                  Pellentesque sit amet hendrerit risus, sed porttitor quam.
-                </p>
-                <p>
-                  Magna exercitation reprehenderit magna aute tempor cupidatat
-                  consequat elit dolor adipisicing. Mollit dolor eiusmod sunt ex
-                  incididunt cillum quis. Velit duis sit officia eiusmod Lorem
-                  aliqua enim laboris do dolor eiusmod. Et mollit incididunt
-                  nisi consectetur esse laborum eiusmod pariatur proident Lorem
-                  eiusmod et. Culpa deserunt nostrud ad veniam.
-                </p>
-                <p>
-                  Mollit dolor eiusmod sunt ex incididunt cillum quis. Velit
-                  duis sit officia eiusmod Lorem aliqua enim laboris do dolor
-                  eiusmod. Et mollit incididunt nisi consectetur esse laborum
-                  eiusmod pariatur proident Lorem eiusmod et. Culpa deserunt
-                  nostrud ad veniam. Lorem ipsum dolor sit amet, consectetur
-                  adipiscing elit. Nullam pulvinar risus non risus hendrerit
-                  venenatis. Pellentesque sit amet hendrerit risus, sed
-                  porttitor quam. Magna exercitation reprehenderit magna aute
-                  tempor cupidatat consequat elit dolor adipisicing. Mollit
-                  dolor eiusmod sunt ex incididunt cillum quis. Velit duis sit
-                  officia eiusmod Lorem aliqua enim laboris do dolor eiusmod. Et
-                  mollit incididunt nisi consectetur esse laborum eiusmod
-                  pariatur proident Lorem eiusmod et. Culpa deserunt nostrud ad
-                  veniam.
-                </p>
+                <Divider />
+                <Popover placement="top" color={"secondary"} className="">
+                  <PopoverTrigger>
+                    <Button color={"warning"} className="capitalize w-1/2">
+                      Connection Details
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent>
+                    <div className="px-1 py-2">
+                      <div className="text-small font-bold">
+                        Connected to Master Node By:
+                      </div>
+                      <div className="text-tiny">MQTT Broker</div>
+                      <Button color="warning" className="capitalize" size="sm">
+                        Ping
+                      </Button>
+                    </div>
+                  </PopoverContent>
+                </Popover>
+                <Divider />
+                <div className="flex flex-col gap-1 items-center">
+                  <Input
+                    isClearable
+                    isDisabled={isLoading}
+                    onClear={() => setWifiSSID("")}
+                    radius={"md"}
+                    label="Wifi SSID"
+                    placeholder="Enter WiFi SSID"
+                    value={wifiSSID}
+                    onChange={handleWifiSSIDChange} // Use onChange to update state
+                    className="max-w-[220px]"
+                  />
+                  <Input
+                    isClearable
+                    isDisabled={isLoading}
+                    onClear={() => setWifiPassword("")}
+                    radius={"md"}
+                    label="Wifi Password"
+                    placeholder="Enter the WiFi Password"
+                    value={wifiPassword}
+                    onChange={handleWifiPasswordChange} // Use onChange to update state
+                    className="max-w-[220px]"
+                  />
+                  <Input
+                    isClearable
+                    isDisabled={isLoading}
+                    onClear={() => setMqttServer("")}
+                    radius={"md"}
+                    label="MQTT Server"
+                    placeholder="Enter the MQTT Server"
+                    value={mqttServer}
+                    onChange={handleMqttServerChange} // Use onChange to update state
+                    className="max-w-[220px]"
+                  />
+                  <Input
+                    isClearable
+                    isDisabled={isLoading}
+                    onClear={() => setPingIdentityTopic("")}
+                    radius={"md"}
+                    label="Ping Identity Topic"
+                    placeholder="Enter the Ping Identity Topic"
+                    value={pingIdentityTopic}
+                    onChange={handlePingIdentityTopicChange} // Use onChange to update state
+                    className="max-w-[220px]"
+                  />
+                </div>
               </ModalBody>
               <ModalFooter>
                 <Button color="danger" variant="light" onPress={onClose}>
                   Close
                 </Button>
-                <Button color="primary" onPress={onClose}>
-                  Action
+                <Button
+                  color="primary"
+                  onPress={() => {
+                    console.log({
+                      wifiSSID,
+                      wifiPassword,
+                      mqttServer,
+                      pingIdentityTopic,
+                    });
+                    toast.success("Config Updated Successfully");
+                    onClose();
+                  }}
+                >
+                  Update Config
                 </Button>
               </ModalFooter>
             </>
@@ -118,4 +168,6 @@ export default function App() {
       </Modal>
     </div>
   );
-}
+};
+
+export default EditConfigModal;
